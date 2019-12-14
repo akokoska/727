@@ -1,0 +1,820 @@
+---
+title: "Citation Impact of Select Academic Publications Over Time and by Discipline"
+author: "Alexis Kokoska & Stephanie Mendoza"
+date: "`r Sys.Date()`"
+output:
+  pdf_document:
+    df_print: kable
+    toc: yes
+  html_document:
+    df_print: paged
+    toc: yes
+references:
+- author:
+  - family: Chamberlain
+    given: S.
+  container-title: null
+  id: Chamberlain
+  issue: null
+  issued:
+    year: 2019
+  page: null
+  title: Citecorp Client for the Open Citations Corpus R package version 0.1.0
+  type: article-journal
+  volume: null
+- author:
+  - family: Henry
+    given: F. M.
+  container-title: Journal of Health, Physical Education, Recreation
+  id: Henry1964
+  issue: 7
+  issued:
+    year: 1964
+  page: 32-69
+  title: Physical education An academic discipline
+  type: article-journal
+  volume: 35
+- author:
+  - family: Kostoff
+    given: R.
+  container-title: Scientometrics
+  id: Kostoff1998
+  issue: 1
+  issued:
+    year: 1998
+  page: 27-43
+  title: The use and misuse of citation analysis in research evaluation
+  type: article-journal
+  volume: 43
+- author:
+  - family: Moed
+    given: H. F.
+  container-title: Archivum immunologiae et therapiae experimentalis
+  id: Moed2009
+  issue: 1
+  issued:
+    year: 2009
+  page: 13
+  title: New developments in the use of citation analysis in research evaluation
+  type: article-journal
+  volume: 57
+- author:
+  - family: Schwarz
+    given: N.
+  container-title: Applied Cognitive Psychology The Official Journal of the Society
+    for Applied Research in Memory and Cognition
+  id: Schwarz2007
+  issue: 2
+  issued:
+    year: 2007
+  page: 227-287
+  title: Cognitive aspects of survey methodology
+  type: article-journal
+  volume: 21
+- author:
+  - family: Stember
+    given: M
+  container-title: The Social Science Journal
+  id: Stember1991
+  issue: 1
+  issued:
+    year: 1991
+  page: 1-14
+  title: Advancing the social sciences through the interdisciplinary enterprise
+  type: article-journal
+  volume: 28
+- author:
+  - family: Van Noorden
+    given: R.
+  container-title: Nature
+  id: Van2015
+  issue: 7569
+  issued:
+    year: 2015
+  page: 306-307
+  title: Interdisciplinary research by the numbers
+  type: article-journal
+  volume: 525
+---
+
+```{r,echo=FALSE}
+# In order to run this code, change the working directories below to where the file main_frame_all is saved.
+main <- "C:/Users/mendoza_s/Desktop/main_frame_all.csv"
+tag_file <- "C:/Users/mendoza_s/Desktop/tags_categorized.csv"
+```
+
+[Link to Github](https://github.com/akokoska/727)
+
+# Motivation
+
+Our research objective is to investigate how the influence of selected research articles change over time in different fields of study. For this project, the “influence” of a research article is measured by its citation count, a frequently used metric in citation analysis [@Moed2009]. By “fields of study” (also called “academic disciplines”) we mean “an organized body of knowledge collectively embraced in a formal course of learning” [@Henry1964]. Fields of study typically correspond with academic departments found in higher education (such as Psychology, History, Physics, Biology, etc.).  
+
+The citation trends of a paper can provide a link to its “intellectual heritage,” or the history of the influence of the theories or research ideas it presents [@Kostoff1998]. However, the “intellectual heritage” of a paper may differ depending on the field, as different fields may cite the paper in different patterns. (For example, perhaps the computer science field only recently began to cite an influential paper from the psychology field written in the 1950s.)  
+
+We believe it could be useful to look at the trends of article citations in different fields in order to understand the interdisciplinary nature of both the paper and the different academic disciplines that cite it. Interdisciplinary research is praised for its emphasis on exchanging theories and methods from different fields, which may result in novel discoveries. For this reason, interdisciplinary research is considered essential by many researchers [@Van2015; @Stember1991].  
+
+We recognize that citation trends alone cannot tell the complete story of a paper’s influence: even if a paper is no longer cited in its field of origin, this does not necessarily mean that the theories it presents are outdated as citation counts may slow down due to integration of the article [@Moed2009]. Therefore, though we are interested in investigating trends for an initial understanding of the influence of a theory, further research would be necessary to understand the reasons behind the trends.  
+
+In the present project, we select articles that frequently appear in the survey methodology literature to carry out our research objective, i.e., to investigate whether different fields of study cite selected articles in different ways over time. We analyze four seminal articles of interest (henceforth called “seminal articles”) that are cited in the survey methodology literature to explore the feasibility of analyzing citation trends in different fields.  
+
+
+# Seminal Articles
+
+Our selected research articles were chosen by a combination of frequent mentions in our survey methodology courses at the University of Maryland’s Joint Program in Survey Methodology, and our personal interest in the topic. Since we view this as a project in feasibility, we see these selections as examples of what sort of analysis is possible in pursuit of the research objective. Below we have listed the seminal articles, along with a brief description of its topic.  
+
+- **Campbell, D. T. (1950). The indirect assessment of social attitudes. Psychological Bulletin, 47(1), 15.**   
+
+This seminal paper is sometimes cited in the social desirability bias literature, as it discusses the potential threats of validity when asking respondents direct and sensitive questions.    
+
+- **Carley, K. (1993). Coding choices for textual analysis: A comparison of content analysis and map analysis. Sociological Methodology, 75-126.**  
+
+This article describes the differences between content and map analysis in addition to discussing procedures for coding text. As it was originally published in the field of social science, we were curious to see if computer science, for example, would cite this paper in more recent years with the explosion in text analysis.  
+
+- **Conway, M. A. (2005). Memory and the self. Journal of Memory and Language, 53(4), 594-628.**  
+
+This paper outlines a conceptual theory called the Self-Memory System, which is a framework for how the “self” and memory connect. It is sometimes cited in survey methodology in discussions about autobiographical memory as it relates to answering survey questions about oneself.  
+
+- **Trochim, W. M. (1989). An introduction to concept mapping for planning and evaluation. Evaluation and Program Planning, 12(1), 1-16.**  
+
+This paper describes “concept mapping”, which is a tool that can be used to develop a conceptual framework. Trochim outlines the steps to employ concept mapping, as well associated methodological issues. This is a type of social science research methodology that originated in the social sciences, and we were interested to see if and how other fields have adopted this tool.  
+
+
+```{r seminal articles of interest, echo=FALSE}
+# Articles of Interest
+main_doi1 <- "10.1037/h0054114"
+main_doi2 <- "10.2307/271007"
+main_doi3 <- "10.1016/j.jml.2005.08.005"
+main_doi4 <- "10.1057/9780230005853_5"
+main_doi5 <- "10.1016/0149-7189(89)90016-5"
+```
+
+# Data and Methods
+```{r loading packages,echo=FALSE,warning=FALSE,message=FALSE}
+# Install the following packages if not already installed
+#install.packages("citecorp")
+#install.packages("stringr")
+#install.packages("dplyr")
+#install.packages("knitr")
+#install.packages("RSocrata")
+#install.packages("tidyverse")
+#install.packages("shiny")
+#install.packages("DT")
+#install.packages("scales")
+
+#library(citecorp)
+library(stringr)
+library(dplyr)
+library(knitr)
+#library(RSocrata)
+library(tidyverse)
+#library(shiny)
+library(DT)
+library(scales)
+```
+
+```{r reading in journal sources, echo=FALSE,eval=FALSE}
+# Reading in journal sources (2018)
+# Change working directory if needed
+source_18 <- read.csv("/Users/Stephanie/Desktop/JPSM/Fall2019/Data_Display/Project/sources_2018.csv",header=FALSE)
+source_18$source <- tolower(gsub(".*;(.+);j.*","\\1",source_18$V1))
+source_18 <- source_18[-1,4:5]
+names(source_18) <- c("tags_original18","source")
+```
+
+```{r creating tags in journal sources, echo=FALSE,eval=FALSE}
+# Creating tags variable in source list
+start <- NULL
+end <- NULL
+for (i in 1:length(source_18$source)) {
+start[i] <- as.integer(gregexpr(pattern ='ongoing;',source_18$tags_original18[i])[[1]][1] + 8)
+end[i] <- as.integer(str_length(source_18$tags_original18[i]))
+}
+
+source_18$tags_cleaned <- 
+  source_18$tags_original18 %>%
+  tolower() %>%
+  substr(start,end) %>%
+  gsub("[(]q1[])]","",x=.) %>%
+  gsub("[(]q2[])]","",x=.) %>%
+  gsub("[(]q3[])]","",x=.) %>%
+  gsub("[(]q4[])]","",x=.) %>%
+  gsub("[(]q5[])]","",x=.) %>%
+  gsub("[(]","",x=.) %>%
+  gsub("[)]","",x=.) %>%
+  gsub("[;]","",x=.) %>%
+  gsub("[,]","",x=.) %>%
+  gsub("  "," ",x=.) %>%
+  gsub("miscellaneous","",x=.)
+```
+
+```{r function for creating cites frame, echo=FALSE, eval=FALSE}
+# Function to create frame of all works that site doi of interest from CiteCorp package
+
+creating_cite_frame <- function(main_doi) {
+  
+  cites <- select(oc_coci_cites(main_doi),creation,citing)
+  num_cited <- dim(cites)[1]
+  
+  article_info <- data.frame(matrix(ncol = 13, nrow = 0))
+  cites_frame <- data.frame(matrix(ncol = 15, nrow = 0))
+  names(article_info) <- c("reference","title","volume","source_title","issue","oa_link","page","doi","year","source_id","citation","author","citation_count")
+  names(cites_frame) <- c(names(cites),names(article_info))
+  for (i in 1:num_cited) {
+    article_info[1,] <- oc_coci_meta(cites$citing[i])[1,]
+    cites_frame[i,] <- cbind(cites[i,],article_info[1,])
+  }
+  
+cites_frame <- select(cites_frame,doi,year,author,source_title,citation_count,title,source_id)
+colnames(cites_frame)[colnames(cites_frame)=="source_title"] <- "source"
+cites_frame$source <- tolower(cites_frame$source)
+  
+  return(cites_frame)
+}
+
+```
+
+```{r creating cites frames, echo=FALSE,eval=FALSE, eval=FALSE}
+# Creating frames for each main doi (using function above)
+main1_frame <- creating_cite_frame(main_doi1)
+main2_frame <- creating_cite_frame(main_doi2)
+main3_frame <- creating_cite_frame(main_doi3)
+main5_frame <- creating_cite_frame(main_doi5)
+```
+
+```{r modifying data for source linking, echo=FALSE,eval=FALSE}
+# Preparing data for linking, and then linking sources from frame and source list
+
+## List of sources we need to classify from data
+frame_source_list <- c(main1_frame$source,main2_frame$source,main3_frame$source,main5_frame$source)
+
+## Creating source_cleaned variable from unique sources found in data
+unique_source_list <- 
+frame_source_list %>%
+gsub(" the "," ",x=.) %>%
+gsub("& ","",x=.) %>%
+gsub(" and "," ",x=.) %>%
+gsub("  "," ",x=.) %>%
+unique(x=.) %>%
+data.frame()
+names(unique_source_list) <- "source_cleaned"
+
+## Creating source_cleaned variable from source list
+source_18$source_cleaned <- 
+  source_18$source %>%
+  gsub(" the "," ",x=.) %>%
+  gsub("& ","",x=.) %>%
+  gsub(" and "," ",x=.) %>%
+  gsub("  "," ",x=.)
+
+# Manually linking sources from data and source list
+source_18$source_cleaned <- as.character(source_18$source_cleaned)
+unique_source_list$source_cleaned <- as.character(unique_source_list$source_cleaned)
+sources_merged <- left_join(unique_source_list,source_18,by="source_cleaned")
+```
+
+```{r writing files to create sources_to_link, echo=FALSE,eval=FALSE}
+# Writing sources_18_cleaned.csv - a file containing the original source list with cleaned tag and source variables
+source_18 <- arrange(source_18,desc(source_cleaned))
+write.csv(source_18,"/Users/Stephanie/Desktop/JPSM/Fall2019/Data_Display/Project/sources_18_cleaned.csv",row.names=FALSE)
+
+# Writing sources_merged.csv - a file containing unique sources from main frames after source matching
+sources_merged <- arrange(sources_merged,tags_cleaned,source_cleaned)
+write.csv(sources_merged,"/Users/Stephanie/Desktop/JPSM/Fall2019/Data_Display/Project/sources_merged.csv",row.names=FALSE)
+
+# These two files allowed us to manually link sources that were not automatically matched. The result is read in below.
+
+# sources_linked.csv contains all unique sources with tags (after automatic and manual linking)
+sources_merged_linked <- read.csv("/Users/Stephanie/Desktop/JPSM/Fall2019/Data_Display/Project/sources_linked.csv",header=TRUE)
+names(sources_merged_linked) <- c("source","tags_cleaned")
+```
+
+```{r writing file with unique tags, echo=FALSE,eval=FALSE}
+# Writing unique_tags.csv - a file containing all possible unique tag phrases
+write.csv(data.frame(sources_merged$tags_cleaned),"/Users/Stephanie/Desktop/JPSM/Fall2019/Data_Display/Project/unique_tags.csv",row.names=FALSE)
+
+# unique_tags.csv was manually modified to create the sheet tags_list.csv which contains unique tag words
+tags_list <- read.csv("/Users/Stephanie/Desktop/JPSM/Fall2019/Data_Display/Project/tags_list.csv",header=TRUE)
+names(tags_list) <- c("tag_subcat")
+```
+
+```{r creating full data frame, echo=FALSE,eval=FALSE}
+# Creating frame with fully linked sources and tag phrases
+main1_frame$main_doi <- rep(1,length(main1_frame$doi))
+main2_frame$main_doi <- rep(2,length(main2_frame$doi))
+main3_frame$main_doi <- rep(3,length(main3_frame$doi))
+main5_frame$main_doi <- rep(5,length(main5_frame$doi))
+frames <- rbind(main1_frame,main2_frame,main3_frame,main5_frame)
+
+frames$source <- as.character(frames$source)
+sources_merged_linked$source <- as.character(sources_merged_linked$source)
+main_frame_pretag <- left_join(frames,sources_merged_linked,by="source")
+```
+
+```{r creating tags indicator variables, echo=FALSE,eval=FALSE}
+# Getting tags indicator variables (tag_subcat)
+tag_vars <- data.frame(matrix(ncol = length(tags_list$tag_subcat), nrow = length(main_frame_pretag$tags_cleaned)))
+main_frame_all <- cbind(main_frame_pretag,tag_vars)
+names(main_frame_all) <- c(names(main_frame_pretag),as.vector(tags_list$tag_subcat))
+for (i in 1:dim(main_frame_all)[1]) {
+  for (j in 1:dim(tags_list)[1]) {
+  main_frame_all[i,(dim(main_frame_pretag)[2]+j)] <- grepl(tags_list$tag_subcat[j],main_frame_all$tags_cleaned[i])
+  }
+}
+```
+
+```{r creating tag categories for analysis, echo=FALSE,eval=FALSE}
+# Editing tag categories and creating variables for field of study
+
+# Fixing some tag_subcats
+main_frame_all$history[main_frame_all$`history and philosophy of science`==TRUE] <- FALSE
+
+main_frame_all$`information systems` <- rep(FALSE,dim(main_frame_all)[1])
+main_frame_all$`information systems`[main_frame_all$doi=="10.1057/ejis.2009.2"] <- TRUE
+main_frame_all$`information systems`[main_frame_all$doi=="10.1108/jeim-01-2017-0007"] <- TRUE
+main_frame_all$`information systems`[main_frame_all$doi=="10.1108/jeim-02-2013-0006"] <- TRUE
+main_frame_all$`information systems`[main_frame_all$doi=="10.1108/jeim-03-2014-0028"] <- TRUE
+
+main_frame_all$development <- rep(FALSE,dim(main_frame_all)[1])
+main_frame_all$development[main_frame_all$doi=="10.1080/01944360802380290"] <- TRUE
+main_frame_all$development[main_frame_all$doi=="10.1007/s11077-015-9211-3"] <- TRUE
+main_frame_all$development[main_frame_all$doi=="10.1080/10705420801977890"] <- TRUE
+main_frame_all$development[main_frame_all$doi=="10.1177/1356389006071217"] <- TRUE
+main_frame_all$development[main_frame_all$doi=="10.1177/135638909500100105"] <- TRUE
+main_frame_all$development[main_frame_all$doi=="10.1177/13563899822208365"] <- TRUE
+main_frame_all$development[main_frame_all$doi=="10.1177/13563899822208518"] <- TRUE
+
+main_frame_all$education[main_frame_all$`developmental and educational psychology`==TRUE] <- FALSE
+main_frame_all$education[main_frame_all$doi=="10.1177/001316445501500101"] <- TRUE
+main_frame_all$education[main_frame_all$doi=="10.1177/001316446802800404"] <- TRUE
+main_frame_all$education[main_frame_all$doi=="10.1007/s10984-012-9124-4"] <- TRUE
+main_frame_all$education[main_frame_all$doi=="10.1007/s10984-011-9092-0"] <- TRUE
+main_frame_all$education[main_frame_all$doi=="10.1080/00220973.1983.11011855"] <- TRUE
+main_frame_all$education[main_frame_all$doi=="10.1174/021037012798977412"] <- TRUE
+main_frame_all$education[main_frame_all$doi=="10.1177/0016986215597749"] <- TRUE
+main_frame_all$education[main_frame_all$doi=="10.1177/001698629503900302"] <- TRUE
+main_frame_all$education[main_frame_all$doi=="10.1002/johc.12022"] <- TRUE
+main_frame_all$education[main_frame_all$doi=="10.1177/0165025413484244"] <- TRUE
+main_frame_all$education[main_frame_all$doi=="10.1177/0165025414537922"] <- TRUE
+main_frame_all$education[main_frame_all$doi=="10.1111/j.1467-8624.1969.tb04580.x"] <- TRUE
+main_frame_all$education[main_frame_all$doi=="10.1111/cdev.12440"] <- TRUE
+main_frame_all$education[main_frame_all$doi=="10.1111/cdev.12927"] <- TRUE
+main_frame_all$education[main_frame_all$doi=="10.1026/0049-8637/a000116"] <- TRUE
+main_frame_all$education[main_frame_all$doi=="10.1080/01443410.2013.832151"] <- TRUE
+main_frame_all$education[main_frame_all$doi=="10.1111/mbe.12124"] <- TRUE
+
+main_frame_all$communication[main_frame_all$`computer networks and communications`==TRUE] <- FALSE
+
+main_frame_all$law[main_frame_all$`management monitoring policy and law`==TRUE] <- FALSE
+
+main_frame_all$ecology[main_frame_all$`obstetrics and gynecology`==TRUE] <- FALSE
+
+main_frame_all$toxicology[main_frame_all$`health toxicology and mutagenesis`==TRUE] <- FALSE
+
+# Creating field indicator variables
+main_frame_all$CAT2_anthropology <- NULL
+main_frame_all$CAT2_arts.humanities <- NULL
+main_frame_all$CAT2_business.econ <- NULL
+main_frame_all$CAT2_computer.science <- NULL
+main_frame_all$CAT2_decision.science <- NULL
+main_frame_all$CAT2_development <- NULL
+main_frame_all$CAT2_education <- NULL
+main_frame_all$CAT2_energy.engineering <- NULL
+main_frame_all$CAT2_health.social.science <- NULL
+main_frame_all$CAT2_library.info <- NULL
+main_frame_all$CAT2_linguistics.language <- NULL
+main_frame_all$CAT2_math <- NULL
+main_frame_all$CAT2_medicine <- NULL
+main_frame_all$CAT2_mental.health <- NULL
+main_frame_all$CAT2_neuroscience <- NULL
+main_frame_all$CAT2_nursing.health <- NULL
+main_frame_all$CAT2_philosophy <- NULL
+main_frame_all$CAT2_political.science <- NULL
+main_frame_all$CAT2_psychology <- NULL
+main_frame_all$CAT2_science <- NULL
+main_frame_all$CAT2_social.sciences <- NULL
+main_frame_all$CAT2_urban <- NULL
+
+for (i in 1:dim(main_frame_all)[1]) {
+
+  # anthropology
+  if (main_frame_all$anthropology[i]==TRUE |
+      main_frame_all$`cultural studies`[i]==TRUE) {
+            main_frame_all$CAT2_anthropology[i] <- 1 
+  } else {
+            main_frame_all$CAT2_anthropology[i] <- 0
+  }
+        
+# arts and humanities
+ if (main_frame_all$`arts and humanities`[i]==TRUE |
+     main_frame_all$history[i]==TRUE |
+     main_frame_all$`literature and literary theory`[i]==TRUE |
+     main_frame_all$music[i]==TRUE |
+     main_frame_all$`religious studies`[i]==TRUE |
+     main_frame_all$`visual arts and performing arts`[i]==TRUE) {
+            main_frame_all$CAT2_arts.humanities[i] <- 1
+ } else {
+            main_frame_all$CAT2_arts.humanities[i] <- 0
+ }
+
+# business and economics
+   if (main_frame_all$accounting[i]==TRUE |
+       main_frame_all$`business and international management`[i]==TRUE |
+       main_frame_all$`business management and accounting`[i]==TRUE |
+       main_frame_all$`economics and econometrics`[i]==TRUE |
+       main_frame_all$`economics econometrics and finance`[i]==TRUE |
+       main_frame_all$finance[i]==TRUE |
+       main_frame_all$`industrial relations`[i]==TRUE |
+       main_frame_all$`management information systems`[i]==TRUE |
+       main_frame_all$`management of technology and innovation`[i]==TRUE |
+       main_frame_all$marketing[i]==TRUE |
+       main_frame_all$`organizational behavior and human resource management`[i]==TRUE |
+       main_frame_all$`strategy and management`[i]==TRUE |
+       main_frame_all$`tourism leisure and hospitality management`[i]==TRUE) {
+            main_frame_all$CAT2_business.econ[i] <- 1
+ } else {
+            main_frame_all$CAT2_business.econ[i] <- 0
+ }
+
+# computer science
+ if (main_frame_all$`artificial intelligence`[i]==TRUE |
+     main_frame_all$`computer networks and communications`[i]==TRUE |
+     main_frame_all$`computer science`[i]==TRUE |
+     main_frame_all$`computer science applications`[i]==TRUE |
+     main_frame_all$`hardware and architecture`[i]==TRUE |
+     main_frame_all$`information systems`[i]==TRUE |
+     main_frame_all$software[i]==TRUE |
+     main_frame_all$`human-computer interaction`[i]==TRUE) {
+            main_frame_all$CAT2_computer.science[i] <- 1
+ } else {
+            main_frame_all$CAT2_computer.science[i] <- 0
+ }
+
+# decision sciences
+ if (main_frame_all$`decision sciences`[i]==TRUE |
+     main_frame_all$`information systems and management`[i]==TRUE |
+     main_frame_all$`management science and operations research`[i]==TRUE) {
+            main_frame_all$CAT2_decision.science[i] <- 1
+ } else {
+            main_frame_all$CAT2_decision.science[i] <- 0
+ }
+
+# development
+ if (main_frame_all$development[i]==TRUE) {
+            main_frame_all$CAT2_development[i] <- 1
+ } else {
+            main_frame_all$CAT2_development[i] <- 0
+ }
+  
+# education
+ if (main_frame_all$`e-learning`[i]==TRUE |
+     main_frame_all$education[i]==TRUE) {
+            main_frame_all$CAT2_education[i] <- 1
+ } else {
+            main_frame_all$CAT2_education[i] <- 0
+ }  
+  
+# energy and engineering
+ if (main_frame_all$`civil and structural engineering`[i]==TRUE |
+     main_frame_all$`electrical and electronic engineering`[i]==TRUE |
+     main_frame_all$`energy  `[i]==TRUE |
+     main_frame_all$engineering[i]==TRUE |
+     main_frame_all$`industrial and manufacturing engineering`[i]==TRUE |
+     main_frame_all$`media technology`[i]==TRUE |
+     main_frame_all$`renewable energy sustainability and the environment`[i]==TRUE |
+     main_frame_all$`safety risk reliability and quality`[i]==TRUE) {
+            main_frame_all$CAT2_energy.engineering[i] <- 1
+ } else {
+            main_frame_all$CAT2_energy.engineering[i] <- 0
+ } 
+  
+# health social science
+ if (main_frame_all$`health social science`[i]==TRUE) {
+            main_frame_all$CAT2_health.social.science[i] <- 1
+ } else {
+            main_frame_all$CAT2_health.social.science[i] <- 0
+ }  
+  
+# library and information sciences
+ if (main_frame_all$`library and information sciences`[i]==TRUE) {
+            main_frame_all$CAT2_library.info[i] <- 1
+ } else {
+            main_frame_all$CAT2_library.info[i] <- 0
+ }  
+  
+# linguistics language and communication
+ if (main_frame_all$communication[i]==TRUE |
+     main_frame_all$`language and linguistics`[i]==TRUE |
+     main_frame_all$`linguistics and language`[i]==TRUE) {
+            main_frame_all$CAT2_linguistics.language[i] <- 1
+ } else {
+            main_frame_all$CAT2_linguistics.language[i] <- 0
+ }
+  
+# mathematics and applied mathematics
+ if (main_frame_all$analysis[i]==TRUE |
+     main_frame_all$`applied mathematics`[i]==TRUE |
+     main_frame_all$`modeling and simulation`[i]==TRUE |
+     main_frame_all$`statistics and probability`[i]==TRUE |
+     main_frame_all$`statistics probability and uncertainty`[i]==TRUE) {
+            main_frame_all$CAT2_math[i] <- 1
+ } else {
+            main_frame_all$CAT2_math[i] <- 0
+ }
+  
+# medicine
+ if (main_frame_all$aging[i]==TRUE |
+     main_frame_all$anatomy[i]==TRUE |
+     main_frame_all$`anesthesiology and pain`[i]==TRUE |
+     main_frame_all$`biochemistry genetics and molecular biology`[i]==TRUE |
+     main_frame_all$`complementary and alternative medicine`[i]==TRUE |
+     main_frame_all$`developmental biology`[i]==TRUE |
+     main_frame_all$`drug discovery`[i]==TRUE |
+     main_frame_all$`emergency medicine`[i]==TRUE |
+     main_frame_all$epidemiology[i]==TRUE |
+     main_frame_all$`family practice`[i]==TRUE |
+     main_frame_all$genetics[i]==TRUE |
+     main_frame_all$`geriatrics and gerontology`[i]==TRUE |
+     main_frame_all$`health informatics`[i]==TRUE |
+     main_frame_all$`health policy `[i]==TRUE |
+     main_frame_all$histology[i]==TRUE |
+     main_frame_all$`immunology and microbiology`[i]==TRUE |
+     main_frame_all$`infectious diseases`[i]==TRUE |
+     main_frame_all$medicine[i]==TRUE |
+     main_frame_all$`obstetrics and gynecology`[i]==TRUE |
+     main_frame_all$oncology[i]==TRUE |
+     main_frame_all$otorhinolaryngology[i]==TRUE |
+     main_frame_all$`pathology and forensic medicine`[i]==TRUE |
+     main_frame_all$`pediatrics perinatology and child health`[i]==TRUE |
+     main_frame_all$`pharmaceutical science`[i]==TRUE |
+     main_frame_all$`pharmacology medical`[i]==TRUE |
+     main_frame_all$`pharmacology `[i]==TRUE |
+     main_frame_all$physiology[i]==TRUE |
+     main_frame_all$`physiology medical`[i]==TRUE |
+     main_frame_all$`public health environmental and occupational health `[i]==TRUE |
+     main_frame_all$`radiology nuclear medicine and imaging `[i]==TRUE |
+     main_frame_all$`reproductive medicine`[i]==TRUE |
+     main_frame_all$rheumatology[i]==TRUE |
+     main_frame_all$toxicology[i]==TRUE) {
+            main_frame_all$CAT2_medicine[i] <- 1
+ } else {
+            main_frame_all$CAT2_medicine[i] <- 0
+ }
+  
+# mental health
+ if (main_frame_all$`psychiatric mental health`[i]==TRUE | 
+     main_frame_all$`psychiatry and mental health `[i]==TRUE) {
+            main_frame_all$CAT2_mental.health[i] <- 1
+ } else {
+            main_frame_all$CAT2_mental.health[i] <- 0
+ }
+  
+# neuroscience
+ if (main_frame_all$`behavioral neuroscience`[i]==TRUE |
+     main_frame_all$`biological psychiatry`[i]==TRUE |
+     main_frame_all$`cellular and molecular neuroscience`[i]==TRUE |
+     main_frame_all$`cognitive neuroscience`[i]==TRUE |
+     main_frame_all$`developmental neuroscience`[i]==TRUE |
+     main_frame_all$neurology[i]==TRUE |
+     main_frame_all$neuroscience[i]==TRUE |
+     main_frame_all$`sensory systems`[i]==TRUE |
+     main_frame_all$`neurology clinical`[i]==TRUE) {
+            main_frame_all$CAT2_neuroscience[i] <- 1
+ } else {
+            main_frame_all$CAT2_neuroscience[i] <- 0
+ }
+  
+# nursing and health professions
+ if (main_frame_all$`advanced and specialized nursing`[i]==TRUE |
+     main_frame_all$`community and home care`[i]==TRUE |
+     main_frame_all$`complementary and manual therapy`[i]==TRUE |
+     main_frame_all$`emergency nursing`[i]==TRUE |
+     main_frame_all$gerontology[i]==TRUE |
+     main_frame_all$`health professions`[i]==TRUE |
+     main_frame_all$`leadership and management`[i]==TRUE |
+     main_frame_all$nursing[i]==TRUE |
+     main_frame_all$`nutrition and dietetics`[i]==TRUE |
+     main_frame_all$pediatrics[i]==TRUE |
+     main_frame_all$`physical therapy sports therapy and rehabilitation`[i]==TRUE |
+     main_frame_all$`radiological and ultrasound technology`[i]==TRUE |
+     main_frame_all$rehabilitation[i]==TRUE |
+     main_frame_all$`research and theory`[i]==TRUE |
+     main_frame_all$`speech and hearing`[i]==TRUE |
+     main_frame_all$`sports science`[i]==TRUE) {
+            main_frame_all$CAT2_nursing.health[i] <- 1
+ } else {
+            main_frame_all$CAT2_nursing.health[i] <- 0
+ }
+
+  
+# philosophy
+ if (main_frame_all$`history and philosophy of science`[i]==TRUE |
+     main_frame_all$philosophy[i]==TRUE) {
+            main_frame_all$CAT2_philosophy[i] <- 1
+ } else {
+            main_frame_all$CAT2_philosophy[i] <- 0
+ }
+  
+# political science
+ if (main_frame_all$law[i]==TRUE |
+     main_frame_all$`political science and international relations`[i]==TRUE |
+     main_frame_all$`public administration`[i]==TRUE |
+     main_frame_all$`sociology and political science `[i]==TRUE) {
+            main_frame_all$CAT2_political.science[i] <- 1
+ } else {
+            main_frame_all$CAT2_political.science[i] <- 0
+ }
+  
+# psychology
+ if (main_frame_all$`applied psychology`[i]==TRUE |
+     main_frame_all$`clinical psychology`[i]==TRUE |
+     main_frame_all$`developmental and educational psychology`[i]==TRUE |
+     main_frame_all$`experimental and cognitive psychology`[i]==TRUE |
+     main_frame_all$`neuropsychology and physiological psychology`[i]==TRUE |
+     main_frame_all$psychology[i]==TRUE |
+     main_frame_all$`social psychology`[i]==TRUE) {
+            main_frame_all$CAT2_psychology[i] <- 1
+ } else {
+            main_frame_all$CAT2_psychology[i] <- 0
+ }
+  
+# science
+ if (main_frame_all$`agricultural and biological sciences`[i]==TRUE |
+     main_frame_all$`agronomy and crop science`[i]==TRUE |
+     main_frame_all$`animal science and zoology`[i]==TRUE |
+     main_frame_all$`computers in earth sciences`[i]==TRUE |
+     main_frame_all$`earth and planetary sciences`[i]==TRUE |
+     main_frame_all$ecology[i]==TRUE |
+     main_frame_all$`ecology evolution behavior and systematics `[i]==TRUE |
+     main_frame_all$`environmental science`[i]==TRUE |
+     main_frame_all$`food science`[i]==TRUE |
+     main_frame_all$forestry[i]==TRUE |
+     main_frame_all$`global and planetary change`[i]==TRUE |
+     main_frame_all$`health toxicology and mutagenesis`[i]==TRUE |
+     main_frame_all$`management monitoring policy and law`[i]==TRUE |
+     main_frame_all$`nature and landscape conservation`[i]==TRUE |
+     main_frame_all$`organic chemistry`[i]==TRUE) {
+            main_frame_all$CAT2_science[i] <- 1
+ } else {
+            main_frame_all$CAT2_science[i] <- 0
+ }
+
+# social sciences
+if (main_frame_all$`gender studies`[i]==TRUE |
+     main_frame_all$`human factors and ergonomics`[i]==TRUE |
+     main_frame_all$`life-span and life-course studies `[i]==TRUE |
+     main_frame_all$`social sciences`[i]==TRUE |
+     main_frame_all$`social work`[i]==TRUE) {
+            main_frame_all$CAT2_social.sciences[i] <- 1
+ } else {
+            main_frame_all$CAT2_social.sciences[i] <- 0
+ }
+  
+# urban studies and geography planning
+if (main_frame_all$`geography planning and development`[i]==TRUE |
+     main_frame_all$transportation[i]==TRUE |
+     main_frame_all$`urban studies`[i]==TRUE) {
+            main_frame_all$CAT2_urban[i] <- 1
+ } else {
+            main_frame_all$CAT2_urban[i] <- 0
+ }
+  
+}
+```
+
+```{r removing books conferences and NA, echo=FALSE,eval=FALSE}
+# Removing books and conferences
+main_frame_all <- main_frame_all[is.na(main_frame_all$tag)==FALSE,]
+```
+
+```{r writing final data set, echo=FALSE,eval=FALSE}
+# Writing main_frame_all: a file containing the final data set combined
+write.csv(main_frame_all,"/Users/Stephanie/Desktop/JPSM/Fall2019/Data_Display/Project/main_frame_all.csv",row.names=FALSE)
+```
+
+```{r reading in main data file, echo=FALSE}
+# Change working directory
+main_frame_all <- read.csv(main,header=TRUE)
+```
+
+For each seminal article, we use the Citecorp R package [@Chamberlain] to gather the journal articles that cite the seminal article of interest. First, we input each seminal article’s doi (digital object identifier) into the oc_coci_cites() function, which returns a list of journal articles that cite the inputted doi. For each new journal article that the function returns, we use the oc_coci_meta() function to gather information on its title, authors, publication journal, and year of publication. Any “articles” returned by the oc_coci_cites() function that are in fact books, book chapters, or conference proceedings are dropped from our dataset.  
+
+One major challenge is assigning a field of study to each article that cited one of our seminal articles of interest. For this analysis, field is assigned at the journal level rather than the article level. To do this, we download a list of scientific journals from Scimago Journal and Country Rank list [Scimago Data](https://www.scimagojr.com/journalrank.php), last updated in 2018. Each journal article that cites a seminal article of interest is linked to the Scimago list by journal name.  
+
+Scimago has categorized each journal with a list of tag words that describe the journal’s related fields of study. For example, the “Journal of Consumer Psychology” has the tags “applied psychology” and “marketing”. For articles whose journals are not on the Scimago list, we manually assign tag words based on journal name. Articles with journals in different languages are either translated and given tags or dropped if a translation could not be found. The table below shows the number of journal articles that cite each seminal article of interest before and after data cleaning.  
+
+```{r table 1 number of unique sources and articles, echo=FALSE}
+Seminal_Article <- c("Campbell (1950)","Carley (1993)","Conway (2005)","Trochim (1989)")
+
+doi1 <- main_frame_all[main_frame_all$main_doi==1,]
+Unique_Sources <- length(unique(doi1$source_id))
+Unique_Articles <- dim(doi1)[1]
+table_data1 <- data.frame(cbind(Unique_Sources,Unique_Articles))
+
+doi2 <- main_frame_all[main_frame_all$main_doi==2,]
+Unique_Sources <- length(unique(doi2$source_id))
+Unique_Articles <- dim(doi2)[1]
+table_data2 <- data.frame(cbind(Unique_Sources,Unique_Articles))
+
+doi3 <- main_frame_all[main_frame_all$main_doi==3,]
+Unique_Sources <- length(unique(doi3$source_id))
+Unique_Articles <- dim(doi3)[1]
+table_data3 <- data.frame(cbind(Unique_Sources,Unique_Articles))
+
+doi5 <- main_frame_all[main_frame_all$main_doi==5,]
+Unique_Sources <- length(unique(doi5$source_id))
+Unique_Articles <- dim(doi5)[1]
+table_data5 <- data.frame(cbind(Unique_Sources,Unique_Articles))
+
+table_data <- rbind(table_data1,table_data2,table_data3,table_data5)
+table_data <- cbind(Seminal_Article,table_data)
+kable(table_data,col.names=c("Seminal Article of Interest","Number of Journal Sources","Number of Unique Journal Articles"))
+
+```
+
+The articles that remain in our dataset have 155 unique tag words. We manually group these tag words into 22 fields of study, seen below. To do this, we consult the “subject areas” section of the Scimago website, which groups tag words by field.  
+
+```{r table 2 area of study and tags,echo=FALSE}
+tags_categorized <- read.csv(tag_file,header=TRUE)
+kable(tags_categorized,col.names=c("Area of Study","Tag"))
+```
+
+Each journal article that cites a seminal article of interest is allowed to be categorized by multiple fields of study. For example, an article that is from “Journal of Consumer Psychology” with tags “applied psychology” and “marketing” would have two fields: “psychology” and “business and economics”. The table below shows the number of journal articles in our data that fall into each of the 22 fields.  
+
+```{r table 3 # of journal articles by area of study,echo=FALSE}
+Categories <- c("Anthropology",
+                        "Arts and Humanities",
+                        "Business and Economics",
+                        "Computer Science",
+                        "Decision Sciences",
+                        "Development",
+                        "Education",
+                        "Energy and Engineering",
+                        "Health Social Science",
+                        "Library and Information Sciences",
+                        "Linguistics Language and Communication",
+                        "Mathematics and Applied Mathematics",
+                        "Medicine",
+                        "Mental Health",
+                        "Neuroscience",
+                        "Nursing and Health Professions",
+                        "Philosophy",
+                        "Political Science",
+                        "Psychology",
+                        "Science",
+                        "Social Sciences",
+                        "Urban Studies and Geography Planning")
+
+start <- which(colnames(main_frame_all)=="CAT2_anthropology")
+end <- which(colnames(main_frame_all)=="CAT2_urban")
+
+Campbell.1950 <- as.vector(apply(main_frame_all[main_frame_all$main_doi==1,c(start:end)],2,sum))
+Carley.1993 <- as.vector(apply(main_frame_all[main_frame_all$main_doi==2,c(start:end)],2,sum))
+Conway.2005 <- as.vector(apply(main_frame_all[main_frame_all$main_doi==3,c(start:end)],2,sum))
+Trochim.1989 <- as.vector(apply(main_frame_all[main_frame_all$main_doi==5,c(start:end)],2,sum))
+
+cat_counts <- data.frame(cbind(Categories,Campbell.1950,Carley.1993,Conway.2005,Trochim.1989))
+
+kable(cat_counts,col.names=c("Area of Study","Campbell (1950)","Carley (1993)","Conway (2005)","Trochim (1989)"))
+```
+
+The final dataset is at the journal article level and contains information on each article such as doi, year of publication, author list, journal, citation count, article title, and list of tags. Each of the 22 fields of study has their own variable, which is 1 if the article contains tags that fall into that particular field.  
+
+Since the analytic goal of this research is an exploratory analysis, we explore trends over time by field through a Shiny app. This Shiny app allows users to visualize the number of journal articles that cited a certain seminal article of interest over time, either by the number of citations per year or the cumulative number of citations up to a given year. Users are able to choose a seminal article of interest to focus on, filter by one or more of the 22 fields of study, and adjust the range of years to focus on. Additionally, the Shiny app includes a table that gives the title, author, year, citation count, and field membership of each article represented in the plots.  
+  
+
+# Results
+
+Since our project is of an exploratory nature, the most helpful “result” is the ability to interact with the Shiny app. Nonetheless, we briefly outline a few of the perhaps more interesting results found in our exploration.  
+
+- **Campbell (1950)**  
+
+When searching terms related to social desirability bias, such as “mode effects”, titles such as “Nonresponse and Mode Effects in Self- and Interviewer-Administered Surveys” (Atkeson, Adams, and Alvarez, 2014) appear. This particular article was published in the journal Political Analysis, and therefore has been categorized as a “political science” paper. If we click on just the “political science” category, we see that the field of political science only began citing Campbell (1950) in the late 1990s.  
+
+- **Carley (1993)**  
+
+We were curious if computer scientists began to adopt this article with the increased interest in text mining in recent years. Selecting the “computer science” category, we see that there was a 1996 paper that cited the seminal article of interest titled “Computer-Supported Content Analysis” (Evans). Then, it began to be cited again only in the field of computer science in the 2010s in journals such as Social Network Analysis and Mining. We can also see that it continues to be cited at a steady rate in its field of origin, which is social science.  
+
+- **Conway (2005)**  
+
+We see that this paper appears to continue to be cited at an increasing rate since its publication in the field of psychology. Well-known survey methodology papers and authors appear to have cited this work. Barberio and Dario’s “Calendar Interviewing: A Mixed Methods Device for a Biographical Approach to Migration” (2016) appears. We also see many papers on the “reminiscence bump”, a phenomenon talked about in survey methodology as well.  
+
+- **Trochim (1989)**  
+
+We see that neuroscience and medicine continue to cite this paper at an increasing rate. When selecting the (perhaps) more unexpected fields of decision sciences, philosophy, and computer science, we notice how these fields only began to cite the paper ten years after publication. This could suggest that these fields are becoming more interdisciplinary, as they are citing a paper from outside their disciplines.  
+
+# Limitations
+
+There are several assumptions and decisions made throughout this research that may limit the conclusions we are able to make. As previously mentioned, citation counts alone cannot measure the entirety of an article’s “influence” in different fields. However, citation count data is readily available and provides a way to measure the influence of seminal articles in a timely manner. We can perform this analysis with updated citation count information almost instantaneously, whereas alternative methods of measuring “influence” may not be as timely or standardized.  
+
+The Citecorp package may introduce coverage error into our data collection methods. The Citecorp package is the client for the Open Citation Corpus, which is an open repository of scholarly citation data. The OpenCitations website claims, “the OCC has ingested the references from 326,743 citing bibliographic resources, and contains information about 13,964,148 citation links to 7,565,367 cited resources.” However, the magnitude of citation data does not address the possible coverage bias of citations available on the repository. Since we do not have information on the differences between citations that are and are not included on the repository, we are unable to eliminate the possibility of coverage bias in our results.  
+
+There are also several issues stemming from our process of assigning fields of study to each article. Like the coverage issue presented above, there may also be a similar issue regarding the Scimago journal source list. Articles with journals that are not included on the Scimago list may be systematically different than those that are found on the list. For those without journal matches, we attempted to remedy this issue by manually assigning tag words to articles. However, this manual assignment method is not grounded in any literature, and may introduce additional bias into the field of study categorizations. Additionally, the Scimago source list only includes journals, and works from books or conference proceedings are not included in this analysis. This lack of coverage could also bias our measure of “influence” of these seminal articles.  
+
+Assigning fields of study to articles at the journal level rather than the article level may diminish the accuracy of each field. For example, a journal may be assigned to the fields of “psychology” and “education”, but a given article from that journal may only relate to one of the two fields. Assigning fields of study at the article level would create more accurate field categories. The 22 fields of study categories are based loosely off of “subject areas” in the Scimago website. However, it is possible that we could include more informative categories for analysis.   
+
+Despite these current limitations, this exploratory analysis and the Shiny app tool provides an initial look at the influence of these seminal articles of interest. One advantage of this analysis is the ability to examine any seminal article of interest. Also, these results could be updated over time to examine current trends in citation count.  
+
+
+# References
+
+
